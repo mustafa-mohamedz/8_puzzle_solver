@@ -2,8 +2,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class State {
+
+
     private final String state;
-    private final int cost;
+    private final int depth;
     private final State parent;
 
     @Override
@@ -19,42 +21,20 @@ public class State {
         return state.hashCode();
     }
 
-    public State(String state , int cost, State parent){
+    public State(String state , int depth, State parent){
         this.state = state;
-        this.cost = cost;
+        this.depth = depth;
         this.parent = parent;
     }
-    private State up(){
-        int indexOfZero = state.indexOf('0');
-        State ans = null;
-        if (indexOfZero >= 3){
-            ans = new State(swap(state,indexOfZero,indexOfZero - 3),cost+1,this);
-        }
-        return ans;
+
+    public String getState() {
+        return state;
     }
-    private State down(){
-        int indexOfZero = state.indexOf('0');
-        State ans = null;
-        if (indexOfZero < 6){
-            ans = new State(swap(state,indexOfZero,indexOfZero + 3),cost+1,this);
-        }
-        return ans;
+    public int getDepth() {
+        return depth;
     }
-    private State left(){
-        int indexOfZero = state.indexOf('0');
-        State ans = null;
-        if (indexOfZero%3 != 0){
-            ans = new State(swap(state,indexOfZero,indexOfZero - 1),cost+1,this);
-        }
-        return ans;
-    }
-    private State right(){
-        int indexOfZero = state.indexOf('0');
-        State ans = null;
-        if (indexOfZero%3 != 2){
-            ans = new State(swap(state,indexOfZero,indexOfZero + 1),cost+1,this);
-        }
-        return ans;
+    public State getParent() {
+        return parent;
     }
 
     public List<State> getNeighbors(){
@@ -70,16 +50,47 @@ public class State {
         return neighbors;
     }
 
-    public State getParent() {
-        return parent;
+    private State up(){
+        int indexOfZero = state.indexOf('0');
+        State ans = null;
+        if (indexOfZero >= 3){
+            ans = new State(swap(state,indexOfZero,indexOfZero - 3), depth +1,this);
+        }
+        return ans;
     }
+    private State down(){
+        int indexOfZero = state.indexOf('0');
+        State ans = null;
+        if (indexOfZero < 6){
+            ans = new State(swap(state,indexOfZero,indexOfZero + 3), depth +1,this);
+        }
+        return ans;
+    }
+    private State left(){
+        int indexOfZero = state.indexOf('0');
+        State ans = null;
+        if (indexOfZero%3 != 0){
+            ans = new State(swap(state,indexOfZero,indexOfZero - 1), depth +1,this);
+        }
+        return ans;
+    }
+    private State right(){
+        int indexOfZero = state.indexOf('0');
+        State ans = null;
+        if (indexOfZero%3 != 2){
+            ans = new State(swap(state,indexOfZero,indexOfZero + 1), depth +1,this);
+        }
+        return ans;
+    }
+
+
 
     public int getTotalManhattanCost(){
         int manhattanDistance = 0;
         for (int i = 0;i<9;i++){
             manhattanDistance += calculateManhattanDistance(i,state.indexOf((char) (i + '0')));
         }
-        return manhattanDistance + this.cost;
+        return manhattanDistance + this.depth;
     }
 
     private int calculateManhattanDistance(int i, int j) {
@@ -95,7 +106,7 @@ public class State {
         for (int i = 0;i<9;i++){
             euclideanDistance += calculateEuclideanDistance(i,state.indexOf((char) (i + '0')));
         }
-        return euclideanDistance + this.cost;
+        return euclideanDistance + this.depth;
     }
 
     private double calculateEuclideanDistance(int i, int j) {
