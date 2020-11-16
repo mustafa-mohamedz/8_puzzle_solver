@@ -41,12 +41,12 @@ public class State {
         ArrayList<State> neighbors = new ArrayList<State>();
         State upNeighbor = up();
         if (upNeighbor != null) neighbors.add(upNeighbor);
+        State rightNeighbor = right();
+        if (rightNeighbor != null) neighbors.add(rightNeighbor);
         State downNeighbor = down();
         if (downNeighbor != null) neighbors.add(downNeighbor);
         State leftNeighbor = left();
         if (leftNeighbor != null) neighbors.add(leftNeighbor);
-        State rightNeighbor = right();
-        if (rightNeighbor != null) neighbors.add(rightNeighbor);
         return neighbors;
     }
 
@@ -110,14 +110,18 @@ public class State {
     }
 
     private double calculateEuclideanDistance(int i, int j) {
-        int yi = i/3;
-        int xi = i%3;
-        int yj = j/3;
-        int xj = j%3;
-        return Math.sqrt((xi-xj) * (xi-xj) +(yi - yj) * (yi - yj));
+        int yi = i / 3;
+        int xi = i % 3;
+        int yj = j / 3;
+        int xj = j % 3;
+        return Math.sqrt((xi - xj) * (xi - xj) + (yi - yj) * (yi - yj));
     }
 
-    private static String swap(String str, int i, int j){
+    boolean IsGoal() {
+        return state.equals("012345678");
+    }
+
+    private static String swap(String str, int i, int j) {
         StringBuilder sb = new StringBuilder(str);
         sb.setCharAt(i, str.charAt(j));
         sb.setCharAt(j, str.charAt(i));
