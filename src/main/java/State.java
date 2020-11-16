@@ -40,13 +40,13 @@ public class State {
     public List<State> getNeighbors(){
         ArrayList<State> neighbors = new ArrayList<State>();
         State upNeighbor = up();
-        if(upNeighbor == null)neighbors.add(upNeighbor);
+        if (upNeighbor != null) neighbors.add(upNeighbor);
         State downNeighbor = down();
-        if(downNeighbor == null)neighbors.add(downNeighbor);
+        if (downNeighbor != null) neighbors.add(downNeighbor);
         State leftNeighbor = left();
-        if(leftNeighbor == null)neighbors.add(leftNeighbor);
+        if (leftNeighbor != null) neighbors.add(leftNeighbor);
         State rightNeighbor = right();
-        if(rightNeighbor == null)neighbors.add(rightNeighbor);
+        if (rightNeighbor != null) neighbors.add(rightNeighbor);
         return neighbors;
     }
 
