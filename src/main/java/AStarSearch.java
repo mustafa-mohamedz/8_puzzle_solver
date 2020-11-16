@@ -32,7 +32,7 @@ public class AStarSearch implements SearchAgent {
                 Comparator.comparing(State::getTotalManhattanCost)
                 : Comparator.comparing(State::getTotalEuclideanCost));
         Set<State> explored = new LinkedHashSet<>();
-        Map<String, State> frontierMap = new HashMap<>();
+        Map<String, State> frontierMap = new HashMap<>();//map to easy access element of the frontier
         frontier.add(initialState);
         frontierMap.put(initialState.getState(), initialState);
         while (!frontier.isEmpty()) {
@@ -49,7 +49,9 @@ public class AStarSearch implements SearchAgent {
                     frontier.add(neighbor);
                     frontierMap.put(neighbor.getState(), neighbor);
                 } else if (frontierMap.containsKey(neighbor.getState())) {
+                    //get the copy of this state that exists in the frontier
                     State old = frontierMap.get(neighbor.getState());
+                    //check the if the total cost of the old path is greeter than the new path if so update the node in the frontier
                     if (distanceType.equals("manhattan")) {
                         if (old.getTotalManhattanCost() > neighbor.getTotalManhattanCost()) {
                             frontier.remove(old);
