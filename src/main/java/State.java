@@ -117,7 +117,7 @@ public class State {
         return Math.sqrt((xi - xj) * (xi - xj) + (yi - yj) * (yi - yj));
     }
 
-    boolean IsGoal() {
+    boolean isGoal() {
         return state.equals("012345678");
     }
 
