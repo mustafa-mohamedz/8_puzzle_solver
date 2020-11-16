@@ -3,7 +3,7 @@ import java.util.List;
 
 public class State {
 
-    /*our representation of the state of the puzzle it
+    /*our representation of the state of the puzzle
     for example the state
     *---*---*---*
     | 1 |   | 5 |
