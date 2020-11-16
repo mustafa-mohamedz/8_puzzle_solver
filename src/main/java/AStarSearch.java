@@ -32,12 +32,12 @@ public class AStarSearch implements SearchAgent {
                 Comparator.comparing(State::getTotalManhattanCost)
                 : Comparator.comparing(State::getTotalEuclideanCost));
         Set<State> explored = new LinkedHashSet<>();
-        Set<State> frontierSet = new HashSet<>();
+        Map<String, State> frontierMap = new HashMap<>();
         frontier.add(initialState);
-        frontierSet.add(initialState);
+        frontierMap.put(initialState.getState(), initialState);
         while (!frontier.isEmpty()) {
             State state = frontier.remove();
-            frontierSet.remove(state);
+            frontierMap.remove(state.getState());
             maxDepth = Math.max(maxDepth, state.getDepth());//update max depth
             explored.add(state);
             if (state.isGoal()) {
@@ -45,15 +45,26 @@ public class AStarSearch implements SearchAgent {
             }
             List<State> neighbors = state.getNeighbors();
             for (State neighbor : neighbors) {
-                if (!frontierSet.contains(neighbor) && !explored.contains(neighbor)) {
+                if (!frontierMap.containsKey(neighbor.getState()) && !explored.contains(neighbor)) {
                     frontier.add(neighbor);
-                    frontierSet.add(neighbor);
-                } else if (frontierSet.contains(neighbor)) {
-                    //TODO discuss
-                    frontier.remove(neighbor);
-                    frontierSet.remove(neighbor);
-                    frontier.add(neighbor);
-                    frontierSet.add(neighbor);
+                    frontierMap.put(neighbor.getState(), neighbor);
+                } else if (frontierMap.containsKey(neighbor.getState())) {
+                    State old = frontierMap.get(neighbor.getState());
+                    if (distanceType.equals("manhattan")) {
+                        if (old.getTotalManhattanCost() > neighbor.getTotalManhattanCost()) {
+                            frontier.remove(old);
+                            frontierMap.remove(old.getState());
+                            frontier.add(neighbor);
+                            frontierMap.put(neighbor.getState(), neighbor);
+                        }
+                    } else {
+                        if (old.getTotalEuclideanCost() > neighbor.getTotalEuclideanCost()) {
+                            frontier.remove(old);
+                            frontierMap.remove(old.getState());
+                            frontier.add(neighbor);
+                            frontierMap.put(neighbor.getState(), neighbor);
+                        }
+                    }
                 }
             }
         }
@@ -78,14 +89,5 @@ public class AStarSearch implements SearchAgent {
 
     public long runningTime() {
         return runningTime;
-    }
-
-    public static void main(String[] args) {
-        SearchAgent searchAgent = new AStarSearch("125340678", "manhattan");
-        searchAgent.getPath().forEach(System.out::println);
-        System.out.println(searchAgent.getCost());
-        System.out.println(searchAgent.getSearchDepth());
-        System.out.println(searchAgent.runningTime());
-        searchAgent.getExpandedNodes().forEach(System.out::println);
     }
 }
