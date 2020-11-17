@@ -19,12 +19,15 @@ public class DFSAgent implements SearchAgent {
         this.cost = lastState.isGoal() ? lastState.getDepth() : -1;
 
         this.path = new ArrayList<>();
-        State parent = lastState.getParent();
-        while (parent != null) {
-            path.add(parent.getState());
-            parent = parent.getParent();
+        if (lastState.isGoal()) {
+            this.path.add(lastState.getState());
+            State parent = lastState.getParent();
+            while (parent != null) {
+                path.add(parent.getState());
+                parent = parent.getParent();
+            }
+            Collections.reverse(path);
         }
-        Collections.reverse(path);
     }
 
     private List<State> search(State initialState) {
@@ -39,7 +42,6 @@ public class DFSAgent implements SearchAgent {
             explored.add(currentState);//add it to explored list
             maxDepth = Math.max(maxDepth, currentState.getDepth());//update max depth
             if (currentState.isGoal()) return new ArrayList<>(explored);//terminate if goal found
-
             currentState.getNeighbors().forEach(neighbor -> {//iterate for each neighbor
                 if (!frontierSet.contains(neighbor) && !explored.contains(neighbor)) { //if neighbor didn't explored or not in frontier set
                     frontier.push(neighbor);//add neighbor to frontier stack

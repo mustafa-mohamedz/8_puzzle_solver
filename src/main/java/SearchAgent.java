@@ -4,7 +4,7 @@ public interface SearchAgent {
 
 
     /**
-     * @return the path to reach the goal based on the agent algorithm
+     * @return the path to reach the goal based on the agent algorithm or empty list if the puzzle unsolvable
      */
     List<String> getPath();
 

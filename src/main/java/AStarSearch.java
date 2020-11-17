@@ -18,13 +18,15 @@ public class AStarSearch implements SearchAgent {
         this.cost = lastState.isGoal() ? lastState.getDepth() : -1;
 
         this.path = new ArrayList<>();
-        this.path.add(lastState.getState());
-        State parent = lastState.getParent();
-        while (parent != null) {
-            path.add(parent.getState());
-            parent = parent.getParent();
+        if (lastState.isGoal()) {
+            this.path.add(lastState.getState());
+            State parent = lastState.getParent();
+            while (parent != null) {
+                path.add(parent.getState());
+                parent = parent.getParent();
+            }
+            Collections.reverse(path);
         }
-        Collections.reverse(path);
     }
 
     private List<State> Search(State initialState, String distanceType) {
